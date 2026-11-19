@@ -33,6 +33,10 @@ def process_order(order, products, customers, tax_rates):
 
     errors = validate_order(order, products, customers)
 
+    if errors:
+        raise ValueError("Error: order was invalid")
+
+
     subtotal = calculate_subtotal(order, products)
     discounts = apply_discounts(order, customer, products, subtotal)
     tax = calculate_tax(customer, subtotal, tax_rates)

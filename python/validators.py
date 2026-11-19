@@ -50,8 +50,7 @@ def validate_order(order, products, customers):
             errors.append(f"Invalid quantity for {product['name']}")
         elif quantity <= 0:
             errors.append(f"Quantity must be positive for {product['name']}")
-
-        if quantity and product["stock"] < 1:
+        elif quantity > product["stock"]:
             errors.append(f"Not enough inventory for {product['name']}")
 
     return errors
