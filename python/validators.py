@@ -21,6 +21,9 @@ def find_customer_by_id(customers, customer_id):
 
 def validate_order(order, products, customers):
     errors = []
+    if order is None or products is None or customers is None:
+        errors.append("Order, products, or customers is missing")
+        return errors
 
     if "id" not in order:
         errors.append("Order is missing an id")
