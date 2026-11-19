@@ -1,8 +1,10 @@
 def is_non_empty_string(value):
+    value = value.strip()
     return isinstance(value, str) and len(value) > 0
 
 
 def find_product_by_id(products, product_id):
+    product_id = product_id.strip()
     for product in products:
         if product["id"] == product_id:
             return product
@@ -10,6 +12,7 @@ def find_product_by_id(products, product_id):
 
 
 def find_customer_by_id(customers, customer_id):
+    customer_id = customer_id.strip()
     for customer in customers:
         if customer["id"] == customer_id:
             return customer
