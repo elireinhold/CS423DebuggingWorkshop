@@ -2,6 +2,8 @@ def reserve_inventory(products, order):
     for item in order["items"]:
         product = next((p for p in products if p["id"] == item["product_id"]), None)
         if product is not None:
+            if item["quantity"] > product["stock"]:
+                raise ValueError("Error: quantity to be reserved is greater than the available product stock.")
             product["stock"] -= item["quantity"]
 
 
