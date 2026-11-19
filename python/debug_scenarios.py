@@ -1,6 +1,6 @@
 from data import get_products, get_customers, get_orders, get_tax_rates
 from orders import process_order, calculate_subtotal
-from reports import find_product_by_name, low_stock_products, category_summary
+from reports import find_product_by_name, low_stock_products, category_summary, products_sorted_by_price
 from discounts import coupon_discount_amount, bulk_discount_amount, loyalty_discount_amount
 
 
@@ -20,6 +20,16 @@ def main():
 
     low_names = [p["name"] for p in low_stock_products(products, 5)]
     check("Pen Pack" in low_names, "Low-stock report should include out-of-stock products")
+
+    # Edge case: stock exactly at the threshold counts as low stock (Mouse has 4)
+    low_names_at_4 = [p["name"] for p in low_stock_products(products, 4)]
+    check("Mouse" in low_names_at_4, "Low-stock should include stock equal to the threshold")
+
+    # Edge case: sorting by price must not reorder the original catalog
+    original_ids = [p["id"] for p in products]
+    sorted_products = products_sorted_by_price(products)
+    check([p["price"] for p in sorted_products] == sorted(p["price"] for p in products), "Products should sort by price ascending")
+    check([p["id"] for p in products] == original_ids, "Price sort should not reorder the original catalog")
 
     summary = category_summary(products)
     check(summary["Electronics"]["product_count"] == 2, "Electronics should have 2 products")

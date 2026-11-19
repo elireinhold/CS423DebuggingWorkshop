@@ -1,8 +1,10 @@
 def is_non_empty_string(value):
+    value = value.strip()
     return isinstance(value, str) and len(value) > 0
 
 
 def find_product_by_id(products, product_id):
+    product_id = product_id.strip()
     for product in products:
         if product["id"] == product_id:
             return product
@@ -10,6 +12,7 @@ def find_product_by_id(products, product_id):
 
 
 def find_customer_by_id(customers, customer_id):
+    customer_id = customer_id.strip()
     for customer in customers:
         if customer["id"] == customer_id:
             return customer
@@ -18,6 +21,9 @@ def find_customer_by_id(customers, customer_id):
 
 def validate_order(order, products, customers):
     errors = []
+    if order is None or products is None or customers is None:
+        errors.append("Order, products, or customers is missing")
+        return errors
 
     if "id" not in order:
         errors.append("Order is missing an id")
@@ -42,10 +48,9 @@ def validate_order(order, products, customers):
         quantity = item.get("quantity")
         if not isinstance(quantity, int):
             errors.append(f"Invalid quantity for {product['name']}")
-        elif quantity < 0:
+        elif quantity <= 0:
             errors.append(f"Quantity must be positive for {product['name']}")
-
-        if quantity and product["stock"] < 1:
+        elif quantity > product["stock"]:
             errors.append(f"Not enough inventory for {product['name']}")
 
     return errors
