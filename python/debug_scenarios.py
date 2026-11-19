@@ -1,6 +1,7 @@
 from data import get_products, get_customers, get_orders, get_tax_rates
 from orders import process_order, calculate_subtotal
 from reports import find_product_by_name, low_stock_products, category_summary, products_sorted_by_price
+from discounts import coupon_discount_amount, bulk_discount_amount, loyalty_discount_amount
 
 
 def check(condition, message):
@@ -44,6 +45,11 @@ def main():
 
     invalid_result = process_order(orders[1], products, customers, tax_rates)
     check(invalid_result["valid"] is False, "Order 1002 should be invalid because Pen Pack is out of stock")
+
+    check(coupon_discount_amount("SAVE10", 100) == 10, "SAVE10 should apply a 10% discount")
+    check(coupon_discount_amount("FIVEOFF", 100) == 5, "FIVEOFF should return $5")
+    check(loyalty_discount_amount(customers[0], 100) == 5, "Loyalty discount should be applied when customer is a loyalty member")
+    check(loyalty_discount_amount(customers[1], 100) == 0, "Loyalty discount should not be applied when customer is not a loyalty member")
 
     print("All debugging scenarios passed.")
 
